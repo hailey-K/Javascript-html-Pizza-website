@@ -1,0 +1,261 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+    <title>Hyerim's Fabulous Pizza</title>
+    <meta charset="utf-8">
+    <link rel="shortcut icon" href="images/favicon.ico">
+    <link rel="stylesheet" href="styles/normalize.css">
+    <link rel="stylesheet" href="styles/assignment2.css">
+
+    <script type="text/javascript">
+        const PASSWORD_ERROR = "Wrong password : It should be at least 6 letters or numbers.";
+        const PASSWORD_ERROR_2 = "Wrong password : Your password doesn't match.";
+        const POSTAL_CODE_ERROR = "Wrong postal code : please follow \"A1A 1A1\" pattern.";
+        const EMAIL_ERROR = "Wrong email : please follw \"AAA@AAA.AA\" format.";
+        const FIRST_NAME_ERROR = "Please fill the first name.";
+        const LAST_NAME_ERROR = "Please fill the last name.";
+        const PHONE_NUMBER_NULL_ERROR = "Please fill the phone number."
+        window.onload = function() {
+            document.getElementById("email").focus();
+        };
+
+        function letterCaseConversion(sentence) {
+            return sentence.toUpperCase();
+        }
+
+        function trimTheWhite(sentence) {
+            return sentence.trim();
+        }
+
+        function capitalize(sentence) {
+            var temp = sentence;
+            var splitResults = temp.split(" ");
+            temp = "";
+            for (var i = 0; i < splitResults.length; i++) {
+                splitResultTemp = splitResults[i];
+                temp += splitResultTemp[0].toUpperCase() + splitResultTemp.slice(1) + " ";
+            }
+            return temp;
+        }
+
+        function finalValidationForm() {
+
+            var postalCode = document.getElementById("zip").value;
+            var phoneNumber = document.getElementById("phone").value;
+            var password = document.getElementById("password").value;
+            var password2 = document.getElementById("verify").value;
+            var email = document.getElementById("email").value;
+            var first_name = document.getElementById("first_name").value;
+            var last_name = document.getElementById("last_name").value;
+            var regExForPostalCode = /[a-zA-Z][0-9][a-zA-Z](-| |)[0-9][a-zA-Z][0-9]/;
+            var regExPassword = /[a-zA-Z0-9]{6,}/;
+            var regExEmail = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+            var error_message = "<b>Error</b> <br>";
+            var radiobutton = document.getElementsByName("size");
+            var radioButtonChosen = null;
+            var checkbox = document.getElementsByName("toppings");
+            var checkboxChosen = null;
+            var focusId = "";
+            var finalValidation = true;
+
+            for (i = 0; i < radiobutton.length; i++) {
+                if (radiobutton[i].checked) {
+                    radioButtonChosen = radiobutton[i].value
+                }
+            }
+
+            if (radioButtonChosen == null) {
+                error_message += "No pizza size selected.<br>";
+                finalValidation = false;
+            }
+
+            for (i = 0; i < checkbox.length; i++) {
+                if (checkbox[i].checked) {
+                    checkboxChosen = checkbox[i].value
+                }
+            }
+
+            if (checkboxChosen == null) {
+                error_message += "No pizza toppings selected.<br>";
+                finalValidation = false;
+            }
+
+            if (!email.match(regExEmail) && email != "") {
+                error_message += EMAIL_ERROR + "<br>";
+                finalValidation = false;
+                if (focusId == "") {
+                    focusId = "email";
+                }
+            }
+            if (password != password2 && password != "" && password2 != "") {
+                error_message += PASSWORD_ERROR_2 + "<br>";
+                finalValidation = false;
+                if (focusId == "") {
+                    focusId = "password";
+                }
+            }
+            if (!password.match(regExPassword) && password != "") {
+                error_message += PASSWORD_ERROR + "<br>";
+                finalValidation = false;
+                if (focusId == "") {
+                    focusId = "password";
+                }
+            }
+
+            if (first_name == "") {
+                error_message += FIRST_NAME_ERROR + "<br>";
+                finalValidation = false;
+                if (focusId == "") {
+                    focusId = "first_name";
+                }
+            }
+            if (last_name == "") {
+                error_message += LAST_NAME_ERROR + "<br>";
+                finalValidation = false;
+                if (focusId == "") {
+                    focusId = "last_name";
+                }
+            }
+            if (phoneNumber == "") {
+                error_message += PHONE_NUMBER_NULL_ERROR + "<br>";
+                finalValidation = false;
+                if (focusId == "") {
+                    focusId = "phone";
+                }
+            }
+            if (!postalCode.match(regExForPostalCode) && postalCode != "") {
+                error_message += POSTAL_CODE_ERROR + "<br>";
+                finalValidation = false;
+                if (focusId == "") {
+                    focusId = "zip";
+                }
+            }
+
+            if (finalValidation) {
+                return true;
+            } else {
+                document.getElementById("error_message").innerHTML = error_message;
+                if (focusId != "") {
+                    document.getElementById(focusId).focus();
+                }
+                return false;
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <header>
+        <img src="images/pizza-logo.png" alt="Pizza Logo" width="180">
+        <h2>Hyerim's Fabulous Pizza</h2>
+        <h3>Greatest Pizza Ever!</h3>
+    </header>
+
+    <main>
+        <article>
+            <h1>Customize Your Pizza</h1>
+            <p id="requiredfields">* required fields : Please fill every required text box.</p>
+            <form onsubmit="return finalValidationForm();">
+
+                <fieldset>
+                    <legend id="requiredfields">*Pizza Size</legend>
+
+                    <p>What size of pizza do you want?</p>
+                    <input id="radio" type="radio" name="size" value="small">Small
+                    <br>
+                    <input id="radio" type="radio" name="size" value="medium">Medium
+                    <br>
+                    <input id="radio" type="radio" name="size" value="large">Large
+                    <br>
+                    <input id="radio" type="radio" name="size" value="xlarge">X-Large
+                    <br>
+                    <input id="radio" type="radio" name="size" value="partysize">Party Size
+
+                </fieldset>
+                <fieldset>
+                    <legend id="requiredfields">*Pizza Toppings</legend>
+
+                    <p>What kind of toppings do you want?</p>
+                    <input id="checkbox" type="checkbox" name="toppings" value="pepperoni">Pepperoni
+                    <br>
+                    <input id="checkbox" type="checkbox" name="toppings" value="greenpepper">Green Pepper
+                    <br>
+                    <input id="checkbox" type="checkbox" name="toppings" value="bacon">Bacon
+                    <br>
+                    <input id="checkbox" type="checkbox" name="toppings" value="sausage">Sausage
+                    <br>
+                    <input id="checkbox" type="checkbox" name="toppings" value="tomato">Tomato
+                    <br>
+                    <input id="checkbox" type="checkbox" name="toppings" value="onion">Onion
+                </fieldset>
+
+                <fieldset>
+                    <legend>Customer Information</legend>
+                    <label for="email">E-Mail:</label>
+                    <input class="box" name="email" id="email">
+                    <br>
+                    <label for="password">Password:</label>
+                    <input class="box" type="password" name="password" id="password" placeholder="At least 6 letters or numbers">
+                    <br>
+                    <label for="verify">Verify Password:</label>
+                    <input class="box" type="password" name="verify" id="verify">
+                    <br>
+                    <label id="requiredfields" for="first_name">*First Name:</label>
+                    <input type="text" name="first_name" id="first_name" onblur="this.value = letterCaseConversion(this.value);">
+                    <br>
+                    <label id="requiredfields" for="last_name">*Last Name:</label>
+                    <input type="text" name="last_name" id="last_name" onblur="this.value=trimTheWhite(this.value);">
+                    <br>
+                    <label for="address">Address:</label>
+                    <input type="text" name="Address" id="address" onblur="this.value=capitalize(this.value);">
+                    <br>
+                    <label for="zip">Postal Code:</label>
+                    <input type="text" name="zip" id="zip" placeholder="A1A 1A1">
+                    <br>
+                    <label id="requiredfields" for="phone">*Phone Number:</label>
+                    <input type="tel" name="phone" id="phone">
+                    <br>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Order Information</legend>
+                    <label for="Order_type">Order Type:</label>
+                    <select name="Order_type" id="Order_type">
+                        <option value="d">Delivery</option>
+                        <option value="p">Pick up</option>
+                        <option value="e">Eat in</option>
+                    </select>
+                    <br>
+                    <label for="Order_date">Order Date:</label>
+                    <input type="date" name="Order_date" id="Order_date">
+                    <br>
+                </fieldset>
+                <label>&nbsp;</label>
+                <input type="submit" id="submit" value="Submit">
+                <input type="reset" id="reset" value="Reset Fields">
+                <br>
+
+                <div id="error_message" />
+            </form>
+        </article>
+    </main>
+    <aside>
+        <figure>
+            <img src="images/pizza_Rim.jpg" alt="Smiley face with pizza" height="300" width="250">
+            <figcaption>The brand owner is holding her pizza!</figcaption>
+        </figure>
+        <br>
+        <figure>
+            <img src="images/pizza_Chevy.jpg" alt="Our waiter" height="300" width="250">
+            <figcaption>He is our wonderful waiter! come and visit us to see him.</figcaption>
+        </figure>
+    </aside>
+    <footer>
+        <p>&copy; Copyright 2045 Future Chevy</p>
+    </footer>
+
+</body>
+
+</html>
